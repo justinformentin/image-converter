@@ -4,6 +4,11 @@ Convert and compress images from Node.js or the command line.
 
 `image-converter` is a small image conversion utility built on top of Sharp. It can convert images to `jpg` or `webp`, resize large images, compress output files, process only untracked git files, and run either as a Node.js library or a CLI through `npx`.
 
+## Why
+I built this to make preparing images for publishing easier. Many platforms already optimize images automatically, but on my personal website, which is hosted on my VPS, the images still need to be stored somewhere.
+
+I don’t want to take up multiple megabytes of storage with images that will only ever be displayed at a much smaller size on the site. With this library, you can add images to your repo, run the CLI script, and automatically resize any images that haven’t already been processed.
+
 ---
 
 ## Features
