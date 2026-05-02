@@ -1,10 +1,13 @@
 {
-  "name": "image-converter",
+  "name": "fast-image-converter",
   "version": "0.1.0",
   "description": "Convert and compress images from Node.js or the command line.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "athor": "Justin Formentin",
+    "repository": "https://github.com/justinformentin/image-converter.git",
+
   "bin": {
     "image-converter": "./dist/cli.js"
   },
@@ -12,8 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "build": "tsc"
   },
   "dependencies": {
     "sharp": "^0.34.0"
@@ -24,5 +26,13 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+    "keywords": [
+    "image",
+    "converter",
+    "compressor",
+    "sharp",
+    "cli",
+    "node"
+    ]
 }
