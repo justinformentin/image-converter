@@ -4,15 +4,15 @@ import { convertImages } from './index.js';
 function printHelp() {
     console.log(`
 Usage:
-  image-converter [quality] [untracked] [options]
+  fast-image-converter [quality] [untracked] [options]
 
 Examples:
-  image-converter 90
-  image-converter -q 90 -p /content/images -f webp
-  image-converter --quality 50 untracked
-  image-converter --max-size 1200
-  image-converter -p ./images -f jpg -q 80 --recursive
-  image-converter --quiet
+  fast-image-converter 90
+  fast-image-converter -q 90 -p /content/images -f webp
+  fast-image-converter --quality 50 untracked
+  fast-image-converter --max-size 1200
+  fast-image-converter -p ./images -f jpg -q 80 --recursive
+  fast-image-converter --quiet
 
 Options:
   -p, --path <path>          Folder path. Default: /

@@ -1,8 +1,8 @@
-# image-converter
+# fast-image-converter
 
 Convert and compress images from Node.js or the command line.
 
-`image-converter` is a lightweight image conversion utility built on [Sharp](https://sharp.pixelplumbing.com/) as the single dependency, and the total size is 10.8 KB, 5.6Kb minified.
+`fast-image-converter` is a lightweight image conversion utility built on [Sharp](https://sharp.pixelplumbing.com/) as the single dependency, and the total size is 10.8 KB, 5.6Kb minified.
 
 ## Features
 
@@ -30,13 +30,13 @@ Check out [x-rsync](https://www.npmjs.com/package/x-rsync) for a cross-platform 
 ## Installation
 
 ```bash
-npm install image-converter
+npm install fast-image-converter
 ```
 
 Or run directly with `npx`:
 
 ```bash
-npx image-converter
+npx fast-image-converter
 ```
 
 ---
@@ -44,7 +44,7 @@ npx image-converter
 ## CLI usage
 
 ```bash
-image-converter [options]
+fast-image-converter [options]
 ```
 
 ### Examples
@@ -52,43 +52,43 @@ image-converter [options]
 Convert images using default settings (folder `/`, format `jpg`, quality `85`):
 
 ```bash
-npx image-converter
+npx fast-image-converter
 ```
 
 Convert images in a specific folder to `webp`:
 
 ```bash
-npx image-converter -p ./images -f webp -q 90
+npx fast-image-converter -p ./images -f webp -q 90
 ```
 
 Resize images so the largest dimension is at most `1200px`:
 
 ```bash
-npx image-converter -p ./images --max-size 1200
+npx fast-image-converter -p ./images --max-size 1200
 ```
 
 Convert recursively:
 
 ```bash
-npx image-converter -p ./images -f webp --recursive
+npx fast-image-converter -p ./images -f webp --recursive
 ```
 
 Process only untracked git files (skip already-committed images):
 
 ```bash
-npx image-converter -p ./project --untracked
+npx fast-image-converter -p ./project --untracked
 ```
 
 Process images faster with concurrency:
 
 ```bash
-npx image-converter -p ./images -f webp -q 85 --concurrency 4
+npx fast-image-converter -p ./images -f webp -q 85 --concurrency 4
 ```
 
 Suppress logs:
 
 ```bash
-npx image-converter -p ./images -f webp --quiet
+npx fast-image-converter -p ./images -f webp --quiet
 ```
 
 ---
@@ -112,7 +112,7 @@ npx image-converter -p ./images -f webp --quiet
 
 ## Default behavior
 
-By default, `image-converter` uses conservative settings:
+By default, `fast-image-converter` uses conservative settings:
 
 ```ts
 {
@@ -131,13 +131,13 @@ By default, `image-converter` uses conservative settings:
 So this:
 
 ```bash
-npx image-converter
+npx fast-image-converter
 ```
 
 is equivalent to:
 
 ```bash
-npx image-converter --path / --quality 85 --format jpg --concurrency 1
+npx fast-image-converter --path / --quality 85 --format jpg --concurrency 1
 ```
 
 ---
@@ -149,7 +149,7 @@ npx image-converter --path / --quality 85 --format jpg --concurrency 1
 Useful for photos, screenshots, and general compressed image output.
 
 ```bash
-npx image-converter -p ./images -f jpg
+npx fast-image-converter -p ./images -f jpg
 ```
 
 ### WebP
@@ -157,7 +157,7 @@ npx image-converter -p ./images -f jpg
 Useful for web projects where smaller file sizes matter.
 
 ```bash
-npx image-converter -p ./images -f webp
+npx fast-image-converter -p ./images -f webp
 ```
 
 ---
@@ -167,7 +167,7 @@ npx image-converter -p ./images -f webp
 Use `--max-size` to resize images so the largest dimension does not exceed the given value. Aspect ratio is preserved and images are never enlarged.
 
 ```bash
-npx image-converter -p ./images --max-size 1200
+npx fast-image-converter -p ./images --max-size 1200
 ```
 
 | Original size | `--max-size 1200` result |
@@ -183,7 +183,7 @@ npx image-converter -p ./images --max-size 1200
 Use `--untracked` to process only files not yet tracked by git. Re-running the command will never re-convert images already committed to the repo.
 
 ```bash
-npx image-converter -p ./project --untracked
+npx fast-image-converter -p ./project --untracked
 ```
 
 Internally this uses:
@@ -207,7 +207,7 @@ hero.png  →  hero.webp  (hero.png removed)
 To keep originals:
 
 ```bash
-npx image-converter -p ./images -f webp --keep-original
+npx fast-image-converter -p ./images -f webp --keep-original
 ```
 
 Or in Node:
@@ -220,10 +220,10 @@ await convertImages({ folderPath: "./images", format: "webp", deleteOriginal: fa
 
 ## Parallel processing
 
-By default, `image-converter` processes one image at a time, which is safest for memory usage. Increase concurrency to process multiple images simultaneously:
+By default, `fast-image-converter` processes one image at a time, which is safest for memory usage. Increase concurrency to process multiple images simultaneously:
 
 ```bash
-npx image-converter -p ./images --concurrency 4
+npx fast-image-converter -p ./images --concurrency 4
 ```
 
 For large images, keep concurrency low. For smaller web images, `4` works well on most development machines.
@@ -235,7 +235,7 @@ For large images, keep concurrency low. For smaller web images, `4` works well o
 Use `--quiet` to suppress normal logs. Useful for scripts, automation, and CI.
 
 ```bash
-npx image-converter -p ./images -f webp --quiet
+npx fast-image-converter -p ./images -f webp --quiet
 ```
 
 Errors are still thrown by the Node API and printed by the CLI.
@@ -245,7 +245,7 @@ Errors are still thrown by the Node API and printed by the CLI.
 ## Using as a Node.js library
 
 ```ts
-import { convertImages } from "image-converter";
+import { convertImages } from "fast-image-converter";
 
 const summary = await convertImages({
   folderPath: "./images",
@@ -353,8 +353,8 @@ npm run build && node dist/cli.js -p ./test-images -q 80 -f webp
 
 ```bash
 npm run build && npm link
-image-converter -p ./test-images -f webp -q 85
-npm unlink -g image-converter
+fast-image-converter -p ./test-images -f webp -q 85
+npm unlink -g fast-image-converter
 ```
 
 **With `npx .`:**
@@ -367,7 +367,7 @@ npm run build && npx . -p ./test-images -f webp -q 85
 
 ```bash
 npm run build && npm pack
-npx ./image-converter-0.1.0.tgz -p ./test-images -f webp -q 85
+npx ./fast-image-converter-0.1.0.tgz -p ./test-images -f webp -q 85
 ```
 
 ---

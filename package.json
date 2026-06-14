@@ -1,6 +1,6 @@
 {
   "name": "fast-image-converter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert and compress images from Node.js or the command line.",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,7 +9,7 @@
     "repository": "https://github.com/justinformentin/image-converter.git",
 
   "bin": {
-    "image-converter": "./dist/cli.js"
+    "fast-image-converter": "./dist/cli.js"
   },
   "files": [
     "dist"
