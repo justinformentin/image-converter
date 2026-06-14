@@ -5,6 +5,7 @@ export interface ConvertImagesOptions {
     untrackedFilesOnly?: boolean;
     maxSize?: number | null;
     format?: OutputFormat;
+    outputDir?: string | null;
     quiet?: boolean;
     deleteOriginal?: boolean;
     recursive?: boolean;
@@ -39,4 +40,3 @@ type Logger = (...args: unknown[]) => void;
 export declare function logger(quiet: boolean): Logger;
 export declare function convertImages(inputOptions?: ConvertImagesOptions): Promise<ConvertImagesSummary>;
 export {};
-//# sourceMappingURL=index.d.ts.map

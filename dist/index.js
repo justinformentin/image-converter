@@ -18,6 +18,7 @@ const DEFAULT_OPTIONS = {
     untrackedFilesOnly: false,
     maxSize: null,
     format: "jpg",
+    outputDir: null,
     quiet: false,
     deleteOriginal: true,
     recursive: false,
@@ -61,10 +62,10 @@ function isImageFile(filePath) {
 function outputExtension(format) {
     return format === "jpg" ? ".jpg" : ".webp";
 }
-function getOutputPath(filePath, format) {
+function getOutputPath(filePath, format, outputDir) {
     const ext = path.extname(filePath);
     const base = path.basename(filePath, ext);
-    const dir = path.dirname(filePath);
+    const dir = outputDir ?? path.dirname(filePath);
     return path.join(dir, `${base}${outputExtension(format)}`);
 }
 async function pathExists(filePath) {
@@ -143,7 +144,7 @@ function formatBytes(bytes) {
 async function processImage(filePath, options) {
     const originalStats = await fs.stat(filePath);
     const originalSize = originalStats.size;
-    const outputPath = getOutputPath(filePath, options.format);
+    const outputPath = getOutputPath(filePath, options.format, options.outputDir);
     const sameFile = path.resolve(filePath) === path.resolve(outputPath);
     const tempPath = `${outputPath}.tmp-${process.pid}-${Date.now()}-${Math.random()
         .toString(36)
@@ -213,12 +214,17 @@ export async function convertImages(inputOptions = {}) {
     }
     sharp.cache(false);
     sharp.concurrency(options.concurrency);
+    const outputDir = options.outputDir ? path.resolve(options.outputDir) : null;
+    if (outputDir) {
+        await fs.mkdir(outputDir, { recursive: true });
+    }
     log("");
     log(`Scanning folder: ${folderPath}`);
     log(`Mode: ${options.untrackedFilesOnly ? "untracked git files only" : "folder images"}`);
     log(`Output format: ${options.format}`);
     log(`Quality: ${options.quality}`);
     log(`Max size: ${options.maxSize ?? "none"}`);
+    log(`Output directory: ${outputDir ?? "same as source"}`);
     log(`Concurrency: ${options.concurrency}`);
     if (options.concurrency > 1) {
         log("Warning: higher concurrency can process images faster, but it may use significantly more memory.");
@@ -233,7 +239,7 @@ export async function convertImages(inputOptions = {}) {
         }
     }
     const results = await processWithConcurrency(imageFiles, options.concurrency, async (imageFile) => {
-        const outputPath = getOutputPath(imageFile, options.format);
+        const outputPath = getOutputPath(imageFile, options.format, outputDir);
         try {
             const originalStats = await fs.stat(imageFile);
             if (path.resolve(imageFile) !== path.resolve(outputPath)) {

@@ -1,6 +1,6 @@
 {
   "name": "fast-image-converter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Convert and compress images from Node.js or the command line.",
   "type": "module",
   "main": "./dist/index.js",

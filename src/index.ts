@@ -21,6 +21,9 @@ export interface ConvertImagesOptions {
   // Output format.
   // Default: "jpg"
   format?: OutputFormat;
+  // Directory to write output images. null means same directory as source.
+  // Default: null
+  outputDir?: string | null;
   // Suppress logs.
   // Default: false
   quiet?: boolean;
@@ -83,6 +86,7 @@ const DEFAULT_OPTIONS: NormalizedConvertImagesOptions = {
   untrackedFilesOnly: false,
   maxSize: null,
   format: "jpg",
+  outputDir: null,
   quiet: false,
   deleteOriginal: true,
   recursive: false,
@@ -140,10 +144,10 @@ function outputExtension(format: OutputFormat) {
   return format === "jpg" ? ".jpg" : ".webp";
 }
 
-function getOutputPath(filePath: string, format: OutputFormat) {
+function getOutputPath(filePath: string, format: OutputFormat, outputDir?: string | null) {
   const ext = path.extname(filePath);
   const base = path.basename(filePath, ext);
-  const dir = path.dirname(filePath);
+  const dir = outputDir ?? path.dirname(filePath);
 
   return path.join(dir, `${base}${outputExtension(format)}`);
 }
@@ -240,7 +244,7 @@ async function processImage(
   const originalStats = await fs.stat(filePath);
   const originalSize = originalStats.size;
 
-  const outputPath = getOutputPath(filePath, options.format);
+  const outputPath = getOutputPath(filePath, options.format, options.outputDir);
   const sameFile = path.resolve(filePath) === path.resolve(outputPath);
 
   const tempPath = `${outputPath}.tmp-${process.pid}-${Date.now()}-${Math.random()
@@ -341,12 +345,19 @@ export async function convertImages(
   sharp.cache(false);
   sharp.concurrency(options.concurrency);
 
+  const outputDir = options.outputDir ? path.resolve(options.outputDir) : null;
+
+  if (outputDir) {
+    await fs.mkdir(outputDir, { recursive: true });
+  }
+
   log("");
   log(`Scanning folder: ${folderPath}`);
   log(`Mode: ${options.untrackedFilesOnly ? "untracked git files only" : "folder images"}`);
   log(`Output format: ${options.format}`);
   log(`Quality: ${options.quality}`);
   log(`Max size: ${options.maxSize ?? "none"}`);
+  log(`Output directory: ${outputDir ?? "same as source"}`);
   log(`Concurrency: ${options.concurrency}`);
 
   if (options.concurrency > 1) {
@@ -371,7 +382,7 @@ export async function convertImages(
     imageFiles,
     options.concurrency,
     async (imageFile): Promise<ProcessedImageResult> => {
-      const outputPath = getOutputPath(imageFile, options.format);
+      const outputPath = getOutputPath(imageFile, options.format, outputDir);
 
       try {
         const originalStats = await fs.stat(imageFile);

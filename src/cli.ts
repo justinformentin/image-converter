@@ -21,6 +21,7 @@ Options:
   -q, --quality <number>     Quality from 1 to 100. Default: 85
   -f, --format <format>      Output format: jpg or webp. Default: jpg
   -m, --max-size <number>    Max width/height in pixels. Default: none
+  -o, --output <path>        Output directory for converted images. Default: same as source
   -u, --untracked            Only process untracked git files
       --quiet                Suppress logs
       --recursive            Process nested folders
@@ -49,6 +50,10 @@ function parseCliArgs(argv: string[]) {
       'max-size': {
         type: 'string',
         short: 'm',
+      },
+      output: {
+        type: 'string',
+        short: 'o',
       },
       untracked: {
         type: 'boolean',
@@ -119,6 +124,7 @@ function parseCliArgs(argv: string[]) {
     quality: quality ?? 85,
     format: (format ?? 'jpg') as OutputFormat,
     maxSize,
+    outputDir: parsed.values.output ?? null,
     untrackedFilesOnly,
     concurrency,
     quiet: Boolean(parsed.values.quiet),

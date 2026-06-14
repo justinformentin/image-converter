@@ -79,6 +79,12 @@ Process only untracked git files (skip already-committed images):
 npx fast-image-converter -p ./project --untracked
 ```
 
+Save converted images to a separate output directory:
+
+```bash
+npx fast-image-converter -p ./images -o ./output -f webp
+```
+
 Process images faster with concurrency:
 
 ```bash
@@ -101,6 +107,7 @@ npx fast-image-converter -p ./images -f webp --quiet
 | `--quality <number>` | `-q` | Output quality from `1` to `100` | `85` |
 | `--format <format>` | `-f` | Output format: `jpg` or `webp` | `jpg` |
 | `--max-size <number>` | `-m` | Maximum width/height in pixels | `null` |
+| `--output <path>` | `-o` | Output directory for converted images | same as source |
 | `--untracked` | `-u` | Only process untracked git files | `false` |
 | `--recursive` | | Process nested folders | `false` |
 | `--keep-original` | | Keep the original file when converting formats | `false` |
@@ -120,6 +127,7 @@ By default, `fast-image-converter` uses conservative settings:
   quality: 85,
   format: "jpg",
   maxSize: null,
+  outputDir: null,
   untrackedFilesOnly: false,
   deleteOriginal: true,
   recursive: false,
@@ -175,6 +183,22 @@ npx fast-image-converter -p ./images --max-size 1200
 | `3000x2000` | `1200x800` |
 | `800x3000` | `320x1200` |
 | `900x600` | unchanged |
+
+---
+
+## Output directory
+
+By default, converted images are written to the same directory as the source file. Use `--output` to send all converted images to a separate directory instead. The directory is created automatically if it doesn't exist.
+
+```bash
+npx fast-image-converter -p ./images -o ./output -f webp
+```
+
+Or in Node:
+
+```ts
+await convertImages({ folderPath: "./images", outputDir: "./output", format: "webp" });
+```
 
 ---
 
@@ -285,6 +309,9 @@ export interface ConvertImagesOptions {
 
   // Output format. Default: "jpg"
   format?: OutputFormat;
+
+  // Directory to write output images. null means same directory as source. Default: null
+  outputDir?: string | null;
 
   // Delete the original file when the output format changes. Default: true
   deleteOriginal?: boolean;
